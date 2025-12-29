@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ - Nerdech</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <img src="images/nerdech.png" alt="Nerdech" class="logo">
+        <div class="header-right">
+            <div class="user-info">
+                <span id="userName"></span> さん
+            </div>
+            <button class="logout-btn" onclick="logout()">ログアウト</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- レベルと売上概要 -->
+        <div class="card">
+            <h2 class="card-title">ステータス</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">現在のレベル</div>
+                    <div class="stat-value">
+                        <span id="currentLevel">-</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">今月の売上</div>
+                    <div class="stat-value">
+                        <span id="currentMonthSales">-</span>
+                        <span class="stat-unit">円</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">3ヶ月合計</div>
+                    <div class="stat-value">
+                        <span id="threeMonthSales">-</span>
+                        <span class="stat-unit">円</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="levelProgress" class="level-progress" style="display: none;">
+                <h3 style="margin-bottom: 1rem;">次のレベルまで</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="progressText"></div>
+            </div>
+        </div>
+        
+        <!-- 売上推移グラフ -->
+        <div class="card">
+            <h2 class="card-title">売上推移（12ヶ月）</h2>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- 月別売上詳細 -->
+        <div class="card">
+            <h2 class="card-title">月別売上詳細</h2>
+            <div id="monthlySalesDetail"></div>
+        </div>
+        
+        <!-- 担当案件一覧 -->
+        <div class="card">
+            <h2 class="card-title">担当案件</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>案件名</th>
+                        <th>金額</th>
+                        <th>期限</th>
+                        <th>状態</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTable"></tbody>
+            </table>
+        </div>
+        
+        <!-- 個人情報 -->
+        <div class="card">
+            <h2 class="card-title">個人情報</h2>
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="name">名前</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="businessType">事業形態</label>
+                    <select id="businessType">
+                        <option value="individual">個人</option>
+                        <option value="corporate">法人</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="businessName">屋号</label>
+                    <input type="text" id="businessName">
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">所在地</label>
+                    <input type="text" id="address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="birthdate">生年月日</label>
+                    <input type="date" id="birthdate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">新しいパスワード（変更する場合のみ）</label>
+                    <input type="password" id="newPassword">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">更新する</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/staff.js"></script>
+</body>
+</html>

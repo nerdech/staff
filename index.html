@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン - Nerdech</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="images/nerdech.png" alt="Nerdech">
+            </div>
+            <h1 class="login-title">社内管理システム</h1>
+            
+            <div id="errorMessage" style="display: none;" class="alert alert-error"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="userId">ユーザーID</label>
+                    <input type="text" id="userId" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">パスワード</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    ログイン
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者ダッシュボード - Nerdech</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <img src="images/nerdech.png" alt="Nerdech" class="logo">
+        <div class="header-right">
+            <div class="user-info">
+                <span class="badge badge-admin">管理者</span>
+                <span id="userName"></span> さん
+            </div>
+            <button class="logout-btn" onclick="logout()">ログアウト</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- タブナビゲーション -->
+        <div class="card">
+            <div style="display: flex; gap: 1rem; border-bottom: 2px solid #f0f0f0; padding-bottom: 1rem;">
+                <button class="btn btn-secondary" onclick="showTab('users')" id="tabUsers">社員管理</button>
+                <button class="btn btn-secondary" onclick="showTab('orders')" id="tabOrders">発注管理</button>
+                <button class="btn btn-secondary" onclick="showTab('levels')" id="tabLevels">レベル設定</button>
+            </div>
+        </div>
+        
+        <!-- 社員管理タブ -->
+        <div id="usersTab" style="display: none;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 class="card-title" style="margin: 0;">社員一覧</h2>
+                    <button class="btn btn-primary" onclick="openUserModal()">新規追加</button>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ユーザーID</th>
+                            <th>名前</th>
+                            <th>事業形態</th>
+                            <th>レベル</th>
+                            <th>権限</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 発注管理タブ -->
+        <div id="ordersTab" style="display: none;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 class="card-title" style="margin: 0;">発注一覧</h2>
+                    <button class="btn btn-primary" onclick="openOrderModal()">新規発注</button>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>案件名</th>
+                            <th>総額</th>
+                            <th>担当者</th>
+                            <th>期限</th>
+                            <th>状態</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTable"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- レベル設定タブ -->
+        <div id="levelsTab" style="display: none;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 class="card-title" style="margin: 0;">レベル設定</h2>
+                    <button class="btn btn-primary" onclick="openLevelModal()">新規追加</button>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>レベル</th>
+                            <th>説明</th>
+                            <th>必要売上（3ヶ月）</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="levelsTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ユーザー編集モーダル -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="userModalTitle">ユーザー追加</h3>
+                <button class="modal-close" onclick="closeUserModal()">×</button>
+            </div>
+            
+            <form id="userForm">
+                <input type="hidden" id="editUserId">
+                
+                <div class="form-group">
+                    <label for="userId">ユーザーID *</label>
+                    <input type="text" id="userId" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">パスワード <span id="passwordHint">(変更する場合のみ)</span></label>
+                    <input type="password" id="password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userName">名前 *</label>
+                    <input type="text" id="userName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userBusinessType">事業形態</label>
+                    <select id="userBusinessType">
+                        <option value="individual">個人</option>
+                        <option value="corporate">法人</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userBusinessName">屋号</label>
+                    <input type="text" id="userBusinessName">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userAddress">所在地</label>
+                    <input type="text" id="userAddress">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userBirthdate">生年月日</label>
+                    <input type="date" id="userBirthdate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userRole">権限</label>
+                    <select id="userRole">
+                        <option value="staff">一般社員</option>
+                        <option value="admin">管理者</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userLevel">レベル</label>
+                    <input type="number" id="userLevel" min="1" value="1">
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeUserModal()">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 発注編集モーダル -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="orderModalTitle">発注作成</h3>
+                <button class="modal-close" onclick="closeOrderModal()">×</button>
+            </div>
+            
+            <form id="orderForm">
+                <input type="hidden" id="editOrderId">
+                
+                <div class="form-group">
+                    <label for="orderTitle">案件名 *</label>
+                    <input type="text" id="orderTitle" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderTotalAmount">総額 *</label>
+                    <input type="number" id="orderTotalAmount" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderDeadline">期限</label>
+                    <input type="date" id="orderDeadline">
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderStatus">状態</label>
+                    <select id="orderStatus">
+                        <option value="pending">未着手</option>
+                        <option value="in_progress">進行中</option>
+                        <option value="completed">完了</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>担当者割り振り</label>
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <select id="assignmentUserId" style="flex: 2;">
+                            <option value="">担当者を選択...</option>
+                        </select>
+                        <input type="number" id="assignmentAmount" placeholder="金額" min="0" style="flex: 1;">
+                        <button type="button" class="btn btn-success" onclick="addAssignment()">追加</button>
+                    </div>
+                    <div id="assignmentsList" class="assignments-list"></div>
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                        合計: <span id="assignmentTotal">0</span>円 / 総額: <span id="totalAmountDisplay">0</span>円
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeOrderModal()">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- レベル編集モーダル -->
+    <div id="levelModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="levelModalTitle">レベル追加</h3>
+                <button class="modal-close" onclick="closeLevelModal()">×</button>
+            </div>
+            
+            <form id="levelForm">
+                <input type="hidden" id="editLevelId">
+                
+                <div class="form-group">
+                    <label for="levelNumber">レベル番号 *</label>
+                    <input type="number" id="levelNumber" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="levelDescription">説明</label>
+                    <input type="text" id="levelDescription" placeholder="例: 初級エンジニア">
+                </div>
+                
+                <div class="form-group">
+                    <label for="levelRequiredSales">必要売上（3ヶ月合計） *</label>
+                    <input type="number" id="levelRequiredSales" min="0" required>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeLevelModal()">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 売上調整モーダル -->
+    <div id="salesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">売上調整</h3>
+                <button class="modal-close" onclick="closeSalesModal()">×</button>
+            </div>
+            
+            <div id="salesModalContent"></div>
+        </div>
+    </div>
+    
+    <script src="js/admin.js"></script>
+</body>
+</html>

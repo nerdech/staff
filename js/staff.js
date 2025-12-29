@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api'; // 本番環境ではCloud RunのURLに変更
+const API_BASE_URL = 'https://nerdech-app-4vbq53svdq-an.a.run.app/api'; // 本番環境ではCloud RunのURLに変更
 
 let salesChart;
 
